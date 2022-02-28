@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class InboxAppApplication
 
 fun main(args: Array<String>) {
-	runApplication<InboxAppApplication>(*args)
+    runApplication<InboxAppApplication>(*args)
 }
