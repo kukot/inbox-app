@@ -13,7 +13,7 @@ spring:
       keyspace-name: code_with_me
       username: IUNsOAiNQkkrycHkXMBSXcfE
       password: mt9k_,EYttBBRAPra3B2,M5.Z59kbzM_c2UH29z0l3K3fzq6hJuJjy.pG91Uc3zd,UdcjAlp7mjuTgrSeS1_NzPG1-bckFcRb958uvOWjhvp4iEXitGKxDA_StkpXLJK
-      schema-action: recreate-drop-unused
+      schema-action: create-if-not-exists
       request:
         timeout: 10s
       connection:
