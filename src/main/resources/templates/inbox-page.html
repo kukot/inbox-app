@@ -62,8 +62,21 @@
 
     <main>
         <!-- Main content -->
-        <p>Email list</p>
-
+        <div class="card">
+            <div class="card-header">Email list</div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a th:each="item: ${inboxItems}" href="#" class="list-group-item list-group-item-action" aria-current="true">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1" th:text="${item.subject}">Email subject</h5>
+                            <small th:text="${item.prettyTimeString}"></small>
+                        </div>
+                        <small th:text="${item.to}"></small>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <p></p>
     </main>
 
     <footer>
