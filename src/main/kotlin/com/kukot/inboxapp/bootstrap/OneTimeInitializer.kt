@@ -1,6 +1,8 @@
 package com.kukot.inboxapp.bootstrap
 
 import com.datastax.oss.driver.api.core.uuid.Uuids
+import com.kukot.inboxapp.email.Email
+import com.kukot.inboxapp.email.EmailRepository
 import com.kukot.inboxapp.emaillist.EmailListItem
 import com.kukot.inboxapp.emaillist.EmailListItemKey
 import com.kukot.inboxapp.emaillist.EmailListItemRepository
@@ -12,7 +14,8 @@ import org.springframework.stereotype.Component
 @Component
 class OneTimeInitializer(
     val folderRepository: FolderRepository,
-    val emailListItemRepository: EmailListItemRepository
+    val emailListItemRepository: EmailListItemRepository,
+    val emailRepository: EmailRepository
 ) : CommandLineRunner {
     override fun run(vararg args: String?) {
         val countFolder = folderRepository.count()
@@ -21,53 +24,46 @@ class OneTimeInitializer(
         }
     }
 
+    companion object {
+        const val MAIN_USER = "kukot"
+        const val USER1 = "koushik"
+        const val USER2 = "chetan"
+        const val INBOX_FOLDER = "Inbox"
+        const val SENT_FOLDER = "Sent"
+        const val SENT_ITEMS_FOLDER = "Sent Items"
+        const val IMPORTANT_FOLDER = "Important"
+    }
+
     private fun initDefaultData() {
-        val kevinInboxBlue = Folder("kukot", "Inbox", "blue")
-        val kevinInboxRed = Folder("kukot", "Important", "red")
-        val kevinSentGreen = Folder("kukot", "Sent", "green")
-        folderRepository.saveAll(mutableListOf(kevinInboxBlue, kevinInboxRed, kevinSentGreen))
+        val kevinInboxBlue = Folder(MAIN_USER, INBOX_FOLDER, "blue")
+        val kevinSentGreen = Folder(MAIN_USER, SENT_ITEMS_FOLDER, "green")
+        val kevinInboxRed = Folder(MAIN_USER, IMPORTANT_FOLDER, "red")
+        folderRepository.saveAll(mutableListOf(kevinInboxBlue, kevinSentGreen, kevinInboxRed))
 
         // create some email list item
-        for (i in 1..10) {
-            val inboxKey = EmailListItemKey("kukot", "Inbox", Uuids.timeBased())
-            val welcomeInbox = EmailListItem(
-                key = inboxKey,
-                to = listOf("404errors", "koushik"),
-                subject = "Inbox item $i",
-                isUnRead = true
-            )
-            emailListItemRepository.save(welcomeInbox)
-        }
 
-        for (i in 1..10) {
-            val inboxKey = EmailListItemKey("kukot", "Important", Uuids.timeBased())
+        createTenEmailListItem(MAIN_USER, INBOX_FOLDER)
+        createTenEmailListItem(MAIN_USER, SENT_ITEMS_FOLDER)
+        createTenEmailListItem(MAIN_USER, IMPORTANT_FOLDER)
+        createTenEmailListItem(MAIN_USER, SENT_FOLDER)
+        createTenEmailListItem("undefined_user", INBOX_FOLDER)
+    }
+
+    private fun createTenEmailListItem(user: String, label: String) {
+        for (i in 1..30 step 3) {
+            val inboxKey = EmailListItemKey(user, label, Uuids.timeBased())
             val welcomeInbox = EmailListItem(
-                key = inboxKey,
-                to = listOf("404errors", "koushik"),
-                subject = "Important $i",
-                isUnRead = true
+                key = inboxKey, to = listOf(USER2, USER1), subject = "$label $i", isUnRead = true
             )
             emailListItemRepository.save(welcomeInbox)
-        }
-        for (i in 1..10) {
-            val inboxKey = EmailListItemKey("kukot", "Sent", Uuids.timeBased())
-            val welcomeInbox = EmailListItem(
-                key = inboxKey,
-                to = listOf("404errors", "koushik"),
-                subject = "Sent item $i",
-                isUnRead = true
+            val email = Email(
+                inboxKey.timeUUID,
+                MAIN_USER,
+                listOf(USER1, USER2),
+                "$i March daily meeting notification",
+                "We are thrilled to invite you to this meeting"
             )
-            emailListItemRepository.save(welcomeInbox)
-        }
-        for (i in 1..10) {
-            val inboxKey = EmailListItemKey("undefined_user", "Inbox", Uuids.timeBased())
-            val welcomeInbox = EmailListItem(
-                key = inboxKey,
-                to = listOf("404errors", "koushik"),
-                subject = "Sent item $i",
-                isUnRead = true
-            )
-            emailListItemRepository.save(welcomeInbox)
+            emailRepository.save(email)
         }
     }
 }
