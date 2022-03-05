@@ -1,6 +1,7 @@
 package com.kukot.inboxapp.bootstrap
 
 import com.datastax.oss.driver.api.core.uuid.Uuids
+import com.kukot.inboxapp.constants.AppConstants
 import com.kukot.inboxapp.email.Email
 import com.kukot.inboxapp.email.EmailRepository
 import com.kukot.inboxapp.emaillist.EmailListItem
@@ -28,25 +29,21 @@ class OneTimeInitializer(
         const val MAIN_USER = "kukot"
         const val USER1 = "koushik"
         const val USER2 = "chetan"
-        const val INBOX_FOLDER = "Inbox"
-        const val SENT_FOLDER = "Sent"
-        const val SENT_ITEMS_FOLDER = "Sent Items"
-        const val IMPORTANT_FOLDER = "Important"
     }
 
     private fun initDefaultData() {
-        val kevinInboxBlue = Folder(MAIN_USER, INBOX_FOLDER, "blue")
-        val kevinSentGreen = Folder(MAIN_USER, SENT_ITEMS_FOLDER, "green")
-        val kevinInboxRed = Folder(MAIN_USER, IMPORTANT_FOLDER, "red")
+        val kevinInboxBlue = Folder(MAIN_USER, AppConstants.INBOX_FOLDER_LABEL, "blue")
+        val kevinSentGreen = Folder(MAIN_USER, AppConstants.SENT_ITEMS_FOLDER_LABEL, "green")
+        val kevinInboxRed = Folder(MAIN_USER, AppConstants.IMPORTANT_FOLDER_LABEL, "red")
         folderRepository.saveAll(mutableListOf(kevinInboxBlue, kevinSentGreen, kevinInboxRed))
 
         // create some email list item
 
-        createTenEmailListItem(MAIN_USER, INBOX_FOLDER)
-        createTenEmailListItem(MAIN_USER, SENT_ITEMS_FOLDER)
-        createTenEmailListItem(MAIN_USER, IMPORTANT_FOLDER)
-        createTenEmailListItem(MAIN_USER, SENT_FOLDER)
-        createTenEmailListItem("undefined_user", INBOX_FOLDER)
+        createTenEmailListItem(MAIN_USER, AppConstants.INBOX_FOLDER_LABEL)
+        createTenEmailListItem(MAIN_USER, AppConstants.SENT_ITEMS_FOLDER_LABEL)
+        createTenEmailListItem(MAIN_USER, AppConstants.IMPORTANT_FOLDER_LABEL)
+        createTenEmailListItem(MAIN_USER, AppConstants.SENT_FOLDER_LABEL)
+        createTenEmailListItem("undefined_user", AppConstants.INBOX_FOLDER_LABEL)
     }
 
     private fun createTenEmailListItem(user: String, label: String) {
