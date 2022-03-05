@@ -17,8 +17,8 @@ class ControllerAdvice(
 ) {
 
     @ModelAttribute
-    fun getUserFolders(model: Model, @AuthenticationPrincipal principal: OAuth2User) {
-        val loginId = principal.getAttribute<String>("login") ?: return
+    fun getUserFolders(model: Model, @AuthenticationPrincipal principal: OAuth2User?) {
+        val loginId = principal?.getAttribute<String>("login") ?: return
         val folders: List<Folder> = folderRepository.findAllById(loginId)
         model.addAttribute("defaultFolders", folderService.getDefaultFolders(loginId))
         model.addAttribute("userFolders", folders)
