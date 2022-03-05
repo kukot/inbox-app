@@ -23,6 +23,7 @@ class EmailController(
     ): String {
         val email = emailRepository.findById(UUID.fromString(emailId))
             .orElseThrow { RuntimeException("Unable to find message with id $emailId") }
+        email.recipientList = email.to.joinToString(",")
         model.addAttribute("email", email)
         return "view_email_by_id"
     }

@@ -59,17 +59,17 @@
     <main>
         <!-- Main content -->
         <div class="card">
-            <div class="card-header">Email list</div>
-            <div class="card-body">
-                <h1 th:text="${email.subject}">Email subject</h1>
-                <label>From:</label>
-                <span th:text="${email.from}"></span>
-                <br>
-                <label>To:</label>
-                <span th:text="${email.to}"></span>
-                <br>
-                <p th:text="${email.body}"></p>
-            </div>
+            <div class="card-header">View Email</div>
+            <dl class="card-body">
+                <dt>From</dt>
+                <dd th:text="${email.from}"></dd>
+                <dt>To</dt>
+                <dd th:text="${email.recipientList}"></dd>
+                <dt>Subject</dt>
+                <dd th:text="${email.subject}"></dd>
+                <dt>Body</dt>
+                <dd th:text="${email.body}"></dt>
+            </dl>
         </div>
         <p></p>
     </main>

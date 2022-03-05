@@ -1,6 +1,7 @@
 package com.kukot.inboxapp.email
 
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.Transient
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType
 import org.springframework.data.cassandra.core.mapping.CassandraType
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn
@@ -25,4 +26,7 @@ class Email(
 
     @CassandraType(type = CassandraType.Name.TEXT)
     var body: String
-)
+) {
+    @Transient
+    lateinit var recipientList: String
+}
